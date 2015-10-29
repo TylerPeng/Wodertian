@@ -2,7 +2,7 @@
  * Created by TylerLiu on 2015/10/29.
  */
 
-/*¹öµ½¶¥²¿£¬Ö±½Óµ÷ÓÃ*/
+/*æ»šåˆ°é¡¶éƒ¨ï¼Œç›´æŽ¥è°ƒç”¨*/
 
 function scrollToTop(){
 
