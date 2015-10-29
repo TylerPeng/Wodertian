@@ -11,7 +11,7 @@ function scrollToTop(){
     Timer = setInterval(scroll,5)
 
     function scroll(){
-        window.scrollY==0&&clearInterval(Timer);
+        window.scrollY===0&&clearInterval(Timer);
         window.scrollTo(window.scrollX,window.scrollY-Y/50);
     }
 }
