@@ -5,7 +5,6 @@
 /*滚到顶部，直接调用*/
 
 function scrollToTop(){
-
     var Y = window.scrollY, Timer;
 
     Timer = setInterval(scroll,5)
