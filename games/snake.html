@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        body{text-align: center;}
+        number{color: red;font-weight: bolder;text-shadow: 0,0,1px,red;}
+    </style>
+</head>
+<body>
+<div id="num"></div>
+<canvas id="canvas" width="600" height="600"></canvas>
+<script>
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var itemSize = 20;
+    var cols = 30;
+    var rows = 30;
+
+    var array = [];
+    var food;
+
+    start()
+    function start(){
+        var i = 39;
+        array = [{x:Math.floor(Math.random()*cols),y:Math.floor(Math.random()*rows)}];
+        array.push({x:array[0].x-1,y:array[0].y});
+        addFood();
+        window.addEventListener("keyup",function(e){
+            if(e.keyCode>=37&& e.keyCode<=40&&(i- e.keyCode)%2!=0){
+                i = e.keyCode;
+                clearInterval(Timer);
+                move(e.keyCode)
+                Timer = setInterval(move.bind(this, e.keyCode),200);
+            }
+        });
+        var Timer = setInterval(move.bind(this,i),200)
+    }
+
+    function addFood(){
+        document.getElementById("num").innerHTML = "得分:<number>"+(array.length-2)*10+"</number>";
+        var foodX,foodY;
+
+        function aa(){
+            foodX = Math.floor(Math.random()*cols);
+            foodY = Math.floor(Math.random()*rows);
+            for(var i=1;i<array.length;i++){
+                if(array[i].x==foodX&&array[i].y==foodY){
+                    aa();
+                }
+            }
+        }
+        aa();
+        food = {x:foodX,y:foodY};
+    }
+
+    function addItem(){
+        array.push(food);
+        addFood();
+    }
+
+    function move(way){
+        switch(way){
+            case 37:{
+                array.unshift({x:array[0].x-1,y:array[0].y});
+                array.splice(array.length-1,1);
+            };break;
+            case 38:{
+                array.unshift({x:array[0].x,y:array[0].y-1});
+                array.splice(array.length-1,1);
+            };break;
+            case 39:{
+                array.unshift({x:array[0].x+1,y:array[0].y});
+                array.splice(array.length-1,1);
+            };break;
+            case 40:{
+                array.unshift({x:array[0].x,y:array[0].y+1});
+                array.splice(array.length-1,1);
+            };break;
+        }
+        draw();
+    }
+
+    function judge(){
+        var result;
+        for(var i=0;i<array.length;i++){
+            if(array[0].x==array[i].x&&array[0].y==array[i].y){
+                result=false;
+            }else{
+                result=true;
+            }
+        }
+        return result;
+
+    }
+
+    function draw(){
+        if(array[0].x>cols-1||array[0].y>rows-1||array[0].x<0||array[0].y<0||!judge()){
+            return gameOver();
+        }
+        if(array[0].x==food.x&&array[0].y==food.y){
+            addItem();
+        }
+        ctx.clearRect(0,0,itemSize*cols,itemSize*rows);
+        ctx.beginPath();
+        ctx.fillStyle = "black";
+        ctx.fillRect(0,0,itemSize*cols,itemSize*rows);
+
+        ctx.fillStyle = "blue";
+        ctx.fillRect(food.x*20,food.y*20,20,20)
+
+        for(var i=0;i<array.length;i++){
+            ctx.fillStyle = "yellow";
+            if(i===0){
+                ctx.fillStyle = "red";
+            }
+            ctx.fillRect(array[i].x*20,array[i].y*20,20,20);
+        }
+        ctx.closePath();
+    }
+
+    function gameOver(){
+        if(confirm("GameOver,再来一局？")){
+            var i = 39;
+            array = [{x:Math.floor(Math.random()*cols),y:Math.floor(Math.random()*rows)}];
+            array.push({x:array[0].x-1,y:array[0].y});
+            addFood();
+        }else{
+            gameOver = function(){
+                return false;
+            }
+
+        }
+    }
+
+</script>
+</body>
+</html>
