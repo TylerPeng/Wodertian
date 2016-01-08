@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<input type="file" id="img" />
+<div id="div"></div>
+</body>
+<script>
+    var reader = new FileReader();
+    var img = document.getElementById("img");
+    var div = document.getElementById("div");
+    img.onchange = function() {
+        var file = img.files[0];
+        reader.readAsDataURL(file);
+        reader.onload = function() {
+            div.innerHTML = "<img src = '" + this.result + "' />"
+        }
+    }
+</script>
+</html>
