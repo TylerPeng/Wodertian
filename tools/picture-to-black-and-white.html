@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>彩色图片变成黑白图片</title>
+        <style media="screen">
+            input{
+                display: block;
+                margin-bottom: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <input type="file" id="pic">
+        <canvas width="0" height="0" id="original"></canvas>
+        <canvas width="0" height="0" id="worked"></canvas>
+        <script type="text/javascript">
+            initSelectPicture();
+
+            function initSelectPicture(){
+                var picInput = document.getElementById("pic");
+                picInput.onchange = function(){
+                    var fileReader = new FileReader();
+
+                    fileReader.onload = function(){
+                        var img = new Image();
+                        img.src = this.result;
+                        drawOriginalPicture(img);
+                    }
+
+                    fileReader.readAsDataURL(this.files[0]);
+                }
+            }
+
+            function drawOriginalPicture(img){
+                if(!img){return}
+                var originalCanvas = document.getElementById("original"),
+                    context = originalCanvas.getContext("2d");
+
+                originalCanvas.width = img.width;
+                originalCanvas.height = img.height;
+                context.drawImage(img,0,0);
+                workPicture(context.getImageData(0,0,img.width,img.height));
+            }
+
+            function workPicture(imgData){
+                if(!imgData){return}
+                var workedCanvas = document.getElementById("worked"),
+                    context = workedCanvas.getContext("2d"),
+                    pixelData = imgData.data;
+
+                for(var i=0,j=pixelData.length;i<j;i+=4){
+                    var average = (pixelData[i]+pixelData[i+1]+pixelData[i+2])/3;
+                    pixelData[i] = pixelData[i+1] = pixelData[i+2] = average;
+                }
+
+                workedCanvas.width = imgData.width;
+                workedCanvas.height = imgData.height;
+                context.putImageData(imgData,0,0);
+            }
+        </script>
+    </body>
+</html>
